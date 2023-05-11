@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="spel">
+
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <link rel="stylesheet" href="stylesheet2.css">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Zombie Apocalypse</title>
+   
+   <script src="http://spelprogrammering.nu/simple.js">     
+      var player = {
+         x: random(totalWidth),
+         y: random(totalHeight),
+         health: 500
+      };
+
+      var zombies = [];
+      var numZombies = 10;
+
+      for (var i = 0; i < numZombies; i++) {
+         zombies.push({
+            x: random(totalWidth),
+            y: random(totalHeight),
+            speed: random(1, 5),
+            alive: true
+         });
+       
+        
+      }
+
+      function update() {
+         clearScreen();
+
+         // player
+         picture(player.x, player.y, "https://spelprogrammering.nu/bilder/xwing.png");
+
+        // Player movement
+         if (keyboard.d)
+          player.x += 20
+        if (keyboard.a)
+          player.x -= 20
+        if (keyboard.w)
+          player.y -= 20
+         if (keyboard.s)
+          player.y += 20
+
+           
+          
+
+         // Draw zombies and handle collisions
+         for (var i = 0; i < zombies.length; i++) {
+            var zombie = zombies[i];
+            if (zombie.alive) {
+               picture(zombie.x, zombie.y, "https://spelprogrammering.nu/bilder/zombie.png");
+
+               // Attract zombies towards player
+               if (zombie.x < player.x)
+                  zombie.x += zombie.speed;
+               else
+                  zombie.x -= zombie.speed;
+               if (zombie.y < player.y)
+                  zombie.y += zombie.speed;
+               else
+                  zombie.y -= zombie.speed;
+
+               // Handle collision with player
+               if (distance(zombie.x, zombie.y, player.x, player.y) < 20) {
+                  player.health -= 10;
+                  if (player.health <= 0) {
+                     alert("Game over");
+                     stopUpdate();
+                     showMouse();   
+                  }
+               }
+            }
+         }
+            // Update health bar
+            var barWidth = player.health;
+         if (barWidth < 0) {
+            barWidth = 0;
+         }
+         // Health bar, a rect figure and the color red!
+         {
+            rectangle(10, 10, barWidth, 20, "red");
+       
+         }
+         
+
+          
+
+      
+      }
+      function mouseDown() {
+         // Check if player clicked on a zombie
+         for (var i = 1; i < zombies.length; i++) {
+            var zombie = zombies[i];
+            if (distance(zombie.x, zombie.y, mouse.x, mouse.y) < 20 && zombie.alive) {
+               // Kill zombie
+               zombies[i].alive = false;
+            }
+         }
+      }
+   </script>
+</head>
+<body>
+  <canvas id="myCanvas" width="200" height="100"></canvas>
+</body>
+</html>
