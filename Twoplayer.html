@@ -7,18 +7,21 @@
    <link rel="stylesheet" href="stylesheet2.css">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Zombie Apocalypse</title>
-
+   
    <script src="http://spelprogrammering.nu/simple.js">     
       var player = {
          x: random(totalWidth),
          y: random(totalHeight),
          health: 500
       };
-      let backgrundsljud = new Audio("Star Wars - Theme.mp3");
+      var player2 = {
+         m: random(totalWidth),
+         n: random(totalHeight),
+         health: 500
+      };
 
       var zombies = [];
       var numZombies = 10;
-      
 
       for (var i = 0; i < numZombies; i++) {
          zombies.push({
@@ -28,89 +31,38 @@
             alive: true
          });
        
-         
+        
       }
 
-
-
-      class Skott {
-          // Skottens variables x,y=DAMAGExSPEED 
-    constructor(x, y, speed, damage)
-    {
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.damage = damage;
-
-      
-         // Define Skott
-        this.width = 6;
-        this.height = 6;
-        this.color = "red";
-    }
-    drawSkott(ctx) {
-        // Skott Movement
-        this.x += this.speed
-        // Skott Apperance
-        circle(this.x, this.y, this.width, this.height, this.color);
-    }
-
-}
-var skottar = [];
-var skottTimer = 0;
-var skott = new Skott;
-const ctx = canvas.getContext("2d");
-
-
-function update() {
- clearScreen();
- backgrundsljud.play();
- var zombie = zombies[i];
-
- //    Define Skott
-var skottX = player.x + 40;
-    var skottY = player.y + 22;
-    var skottSpeed = 30;
-    var skottDamage = 1;
-    var skottDelay = 3;
-
-  if (skottTimer <= 0 && keyboard.space) {
-        skottar.push(new Skott(skottX, skottY, skottSpeed, skottDamage))
-        skottTimer = skottDelay;
-    }
-    skottTimer -= 1;
-    for (var i = 0; i < zombies.length; i++){
-        if(zombies[i].health <= 0){
-            zombies.splice(i, 1);
-        }
-    }
-       skottar.forEach((skott) => {
-        skott.drawSkott(ctx);
-        for (var i = 0; i < zombies.length; i++){
-        if(zombies[i].health <= 0){
-            zombies.splice(i, 1);
-        }
-    }
-
-    });
-
-
-
-      
-
+      function update() {
+         clearScreen();
 
          // player
          picture(player.x, player.y, "https://spelprogrammering.nu/bilder/xwing.png");
 
-         // Player movement
+        // Player movement
          if (keyboard.d)
           player.x += 20
          if (keyboard.a)
           player.x -= 20
          if (keyboard.w)
           player.y -= 20
-          if (keyboard.s)
+        if (keyboard.s)
           player.y += 20
+
+          // player2
+         picture(player2.m, player2.n, "https://spelprogrammering.nu/bilder/xwing.png");
+
+        // Player2 movement
+        if(keyboard.right)
+            {player2.m += 20}
+            if(keyboard.left)
+            {player2.m -=20}
+            if(keyboard.up)
+            {player2.n -= 20}
+            if(keyboard.down)
+            {player2.n += 20}
+
 
            
           
@@ -152,7 +104,22 @@ var skottX = player.x + 40;
             rectangle(10, 10, barWidth, 20, "red");
        
          }
-                }
+         
+
+          
+
+      
+      }
+      function mouseDown() {
+         // Check if player clicked on a zombie
+         for (var i = 1; i < zombies.length; i++) {
+            var zombie = zombies[i];
+            if (distance(zombie.x, zombie.y, mouse.x, mouse.y) < 20 && zombie.alive) {
+               // Kill zombie
+               zombies[i].alive = false;
+            }
+         }
+      }
    </script>
 </head>
 <body>
